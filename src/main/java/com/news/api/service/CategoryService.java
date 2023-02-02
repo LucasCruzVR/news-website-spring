@@ -29,7 +29,7 @@ public class CategoryService {
     }
 
     public Category findCategory(Integer categoryId) {
-        Optional<Category> teste = categoryRepository.findById(categoryId);
-        return teste.orElseThrow(() -> new ObjectNotFoundException(categoryId, "Not found"));
+        Optional<Category> category = categoryRepository.findById(categoryId);
+        return category.orElseThrow(() -> new ObjectNotFoundException(categoryId, "Not found"));
     }
 }

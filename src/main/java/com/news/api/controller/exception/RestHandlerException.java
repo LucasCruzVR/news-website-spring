@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionSystemException;
@@ -41,6 +42,13 @@ public class RestHandlerException {
             errorMap.put(error.getField(), error.getDefaultMessage());
         });
         return errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException exception) {
+        StandardError response = new StandardError(HttpStatus.UNPROCESSABLE_ENTITY, exception.getMessage());
+        return buildResponseEntity(response);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
