@@ -51,4 +51,10 @@ public class PublicationController {
     public ResponseEntity<Publication> updatePublications(@PathVariable Long id, @RequestBody @Valid PublicationDTO publication) {
         return ResponseEntity.ok().body(publicationService.updatePublication(id, publication));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deletePublications(@PathVariable Long id) {
+        publicationService.deletePublication(id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 } 

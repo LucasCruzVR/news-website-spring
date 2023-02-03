@@ -40,7 +40,7 @@ public class PublicationService {
 
     public Publication getPublication(Long publicationId) {
         Optional<Publication> publication = publicationRepository.findById(publicationId);
-        return publication.orElseThrow(() -> new ObjectNotFoundException(publicationId, "Not found"));
+        return publication.orElseThrow(() -> new ObjectNotFoundException(publicationId, "Publication not found"));
     }
 
     @Transactional
@@ -49,5 +49,14 @@ public class PublicationService {
         Publication category = publicationRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Not found"));
         modelMapper.map(newPublication, category);
         return publicationRepository.save(category);
+    }
+
+    @Transactional
+    public void deletePublication(Long id) {
+        try {
+            publicationRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Could not delete this publication");
+        }
     }
 }

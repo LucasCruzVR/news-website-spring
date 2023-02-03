@@ -29,7 +29,13 @@ public class CategoryController {
     @PutMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Category> updateCategory(@PathVariable Integer id, @RequestBody @Valid CategoryDTO category) {
-        return ResponseEntity.ok().body(categoryService.update(id, category));
+        return ResponseEntity.ok().body(categoryService.updateCategory(id, category));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deleteCategory(@PathVariable Integer id) {
+        categoryService.deleteCategory(id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -31,6 +32,13 @@ public class RestHandlerException {
     public ResponseEntity<Object> handleAuthenticationException(HttpServletRequest request,
             NullPointerException exception) {
         StandardError response = new StandardError(HttpStatus.UNPROCESSABLE_ENTITY, exception.getMessage());
+        return buildResponseEntity(response);
+    }
+
+    @ExceptionHandler(ObjectNotFoundException.class)
+    public ResponseEntity<Object> handleObjectNotFound(HttpServletRequest request,
+                                                                ObjectNotFoundException exception) {
+        StandardError response = new StandardError(HttpStatus.NOT_FOUND, exception.getEntityName().toString());
         return buildResponseEntity(response);
     }
 
