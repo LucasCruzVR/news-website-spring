@@ -1,6 +1,7 @@
 package com.news.api.controller;
 
 import com.news.api.domain.Category;
+import com.news.api.model.CategoryDTO;
 import com.news.api.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +24,12 @@ public class CategoryController {
     @ResponseBody
     public ResponseEntity<Category> createCategory(@RequestBody @Valid Category category) {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.save(category));
+    }
+
+    @PutMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<Category> updateCategory(@PathVariable Integer id, @RequestBody @Valid CategoryDTO category) {
+        return ResponseEntity.ok().body(categoryService.update(id, category));
     }
 
     @GetMapping

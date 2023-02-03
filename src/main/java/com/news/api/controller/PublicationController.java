@@ -1,5 +1,6 @@
 package com.news.api.controller;
 
+import com.news.api.model.PublicationDTO;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.news.api.domain.Publication;
@@ -43,5 +44,11 @@ public class PublicationController {
     @ResponseBody
     public ResponseEntity<Publication> createPublications(@RequestBody @Valid Publication publication) {
         return ResponseEntity.status(HttpStatus.CREATED.value()).body(publicationService.savePublication(publication));
+    }
+
+    @PutMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<Publication> updatePublications(@PathVariable Long id, @RequestBody @Valid PublicationDTO publication) {
+        return ResponseEntity.ok().body(publicationService.updatePublication(id, publication));
     }
 } 
