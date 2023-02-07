@@ -6,17 +6,18 @@ import com.news.api.model.UserAuthReqDTO;
 import com.news.api.service.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.client.HttpClientErrorException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,7 +27,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final AuthenticationManager authManager;
 
-    @PostMapping("/login")
+    @GetMapping("/login")
     @ResponseBody
     public ResponseEntity<?> login(@RequestBody UserAuthReqDTO userReq) {
         try {
@@ -40,8 +41,10 @@ public class AuthenticationController {
             UserAuthReqDTO user = (UserAuthReqDTO) authentication.getPrincipal();
             return ResponseEntity.ok().body(authenticationService.authenticationToken(user));
 
-        } catch (BadCredentialsException ex) {
-            throw new BadCredentialsException("Email or Password are incorrect!");
+        } catch (RuntimeException ex) {
+            Map<String, String> map = new HashMap<>();
+            map.put("error", "Email or Password are incorrect");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(map);
         }
     }
 }
