@@ -1,18 +1,14 @@
 package com.news.api.service;
 
 import com.news.api.domain.User;
-import com.news.api.model.UserAuthReqDTO;
-import com.news.api.model.UserRespDTO;
+import com.news.api.dto.UserAuthReqDTO;
 import com.news.api.repository.UserRepository;
 import com.news.api.security.JwtUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 

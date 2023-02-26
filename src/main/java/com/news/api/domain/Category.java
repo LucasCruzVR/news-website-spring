@@ -4,23 +4,20 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.news.api.itemize.CategoryEnum;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
+@AllArgsConstructor
 @Entity(name = "categories")
 public class Category implements Serializable {
 
@@ -38,19 +35,6 @@ public class Category implements Serializable {
     @OneToMany(mappedBy = "category")
     private List<Publication> publications = new ArrayList<>();
 
-    private Integer status;
-
-    public Category(Integer id, String name, CategoryEnum code) {
-        this.id = id;
-        this.name = name;
-        this.status = code.getCode();
-    }
-
-    public void setStatus(CategoryEnum code) {
-        this.status = code.getCode();
-    }
-
-    public CategoryEnum getStatus() {
-        return CategoryEnum.toEnum(status);
-    }
+    @Enumerated(value = EnumType.STRING)
+    private CategoryEnum status = CategoryEnum.ACTIVE;
 }

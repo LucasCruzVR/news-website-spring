@@ -1,4 +1,4 @@
-package com.news.api.model;
+package com.news.api.dto.user;
 
 import java.io.Serializable;
 

@@ -13,11 +13,19 @@ import org.hibernate.collection.spi.PersistentCollection;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+@Service
 public class MapperClass {
 
     private MapperClass() {
+    }
+
+    public <T> T toObject(Object item, Class<T> clazz) {
+        if (item == null) return null;
+        ModelMapper mapper = new ModelMapper();
+        return mapper.map(item, clazz);
     }
 
     public static <D, T> D converter(final T entity, Class<D> outClass) {

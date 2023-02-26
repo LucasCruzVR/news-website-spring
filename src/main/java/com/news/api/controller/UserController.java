@@ -1,7 +1,7 @@
 package com.news.api.controller;
 
 import com.news.api.domain.User;
-import com.news.api.model.UserRespDTO;
+import com.news.api.dto.user.UserRespDTO;
 import com.news.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

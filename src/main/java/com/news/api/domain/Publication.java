@@ -1,15 +1,8 @@
 package com.news.api.domain;
 
 import java.io.Serializable;
-import java.util.Optional;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -36,7 +29,9 @@ public class Publication implements Serializable {
     private String titleDescription;
 
     private String imageUrl;
-    private Integer status;
+
+    @Enumerated(EnumType.STRING)
+    private PublicationEnum status = PublicationEnum.ANALYSIS;
     
     @Column(columnDefinition = "TEXT")
     private String content;
@@ -44,16 +39,4 @@ public class Publication implements Serializable {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-    
-    public void setStatus(PublicationEnum code) {
-        this.status = code.getCode();
-    }
-
-    public PublicationEnum getStatus() {
-        return PublicationEnum.toEnum(status);
-    }
-
-    public void setCategory(Optional<Category> category) {
-        this.category = category.get();
-    }
 }

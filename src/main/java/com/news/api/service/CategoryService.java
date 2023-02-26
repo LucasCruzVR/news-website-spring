@@ -1,7 +1,7 @@
 package com.news.api.service;
 
 import com.news.api.domain.Category;
-import com.news.api.model.CategoryDTO;
+import com.news.api.dto.category.CategoryCreateDTO;
 import com.news.api.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -10,13 +10,9 @@ import java.util.Optional;
 
 import org.hibernate.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +37,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public Category updateCategory(Integer id, CategoryDTO newcategory) {
+    public Category updateCategory(Integer id, CategoryCreateDTO newcategory) {
         modelMapper.getConfiguration().setSkipNullEnabled(true);
         if (!newcategory.getName().isBlank()) {
             newcategory.setName(StringUtils.capitalize(newcategory.getName().toLowerCase()));

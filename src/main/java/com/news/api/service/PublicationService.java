@@ -1,7 +1,6 @@
 package com.news.api.service;
 
-import com.news.api.domain.Category;
-import com.news.api.model.PublicationDTO;
+import com.news.api.dto.publication.PublicationCreateDTO;
 import org.hibernate.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -9,8 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.news.api.converter.MapperClass;
 import com.news.api.domain.Publication;
-import com.news.api.model.AllPublicationsDTO;
+import com.news.api.dto.publication.AllPublicationsDTO;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.List;
 
@@ -32,10 +32,13 @@ public class PublicationService {
     }
 
     @Transactional
-    public Publication savePublication(Publication publication) {
-        var publicationSaved = publicationRepository.save(publication);
-        publicationSaved.setCategory(categoryRepository.findById(publicationSaved.getCategory().getId()));
-        return publicationSaved;
+    public Publication savePublication(PublicationCreateDTO publicationCreateDTO) {
+        var category = categoryRepository.findById(publicationCreateDTO.getCategory().getId()).orElseThrow(
+                () -> new ObjectNotFoundException(publicationCreateDTO.getCategory().getId(), "Category not found"));
+        Publication publication = MapperClass.converter(publicationCreateDTO, Publication.class);
+        publication.setCategory(category);
+
+        return publicationRepository.save(publication);
     }
 
     public Publication getPublication(Long publicationId) {
@@ -44,7 +47,7 @@ public class PublicationService {
     }
 
     @Transactional
-    public Publication updatePublication(Long id, PublicationDTO newPublication) {
+    public Publication updatePublication(Long id, PublicationCreateDTO newPublication) {
         modelMapper.getConfiguration().setSkipNullEnabled(true);
         Publication category = publicationRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Not found"));
         modelMapper.map(newPublication, category);

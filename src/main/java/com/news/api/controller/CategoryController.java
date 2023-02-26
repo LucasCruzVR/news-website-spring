@@ -1,7 +1,9 @@
 package com.news.api.controller;
 
+import com.news.api.converter.MapperClass;
 import com.news.api.domain.Category;
-import com.news.api.model.CategoryDTO;
+import com.news.api.dto.category.CategoryCreateDTO;
+import com.news.api.dto.category.CategoryDetailDTO;
 import com.news.api.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 
@@ -19,17 +21,18 @@ import org.springframework.web.bind.annotation.*;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final MapperClass mapperClass;
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<Category> createCategory(@RequestBody @Valid Category category) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.save(category));
+    public ResponseEntity<CategoryDetailDTO> createCategory(@RequestBody @Valid Category category) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapperClass.toObject(categoryService.save(category), CategoryDetailDTO.class));
     }
 
     @PutMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<Category> updateCategory(@PathVariable Integer id, @RequestBody @Valid CategoryDTO category) {
-        return ResponseEntity.ok().body(categoryService.updateCategory(id, category));
+    public ResponseEntity<CategoryDetailDTO> updateCategory(@PathVariable Integer id, @RequestBody @Valid CategoryCreateDTO category) {
+        return ResponseEntity.ok().body(mapperClass.toObject(categoryService.updateCategory(id, category), CategoryDetailDTO.class));
     }
 
     @DeleteMapping("/{id}")
@@ -40,12 +43,12 @@ public class CategoryController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<List<Category>> getCategories() {
-        return ResponseEntity.ok().body(categoryService.allCategories());
+    public ResponseEntity<List<CategoryDetailDTO>> getCategories() {
+        return ResponseEntity.ok().body(MapperClass.converter(categoryService.allCategories(), CategoryDetailDTO.class));
     }
 
-    @GetMapping(value = "/{category_id}")
-    public ResponseEntity<Category> getCategory(@PathVariable Integer category_id) {
-        return ResponseEntity.ok().body(categoryService.findCategory(category_id));
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<CategoryDetailDTO> getCategory(@PathVariable Integer id) {
+        return ResponseEntity.ok().body(mapperClass.toObject(categoryService.findCategory(id), CategoryDetailDTO.class));
     }
 }
