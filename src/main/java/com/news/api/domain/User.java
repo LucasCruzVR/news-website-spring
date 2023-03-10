@@ -1,18 +1,16 @@
 package com.news.api.domain;
 
-import java.io.Serializable;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "users")
 @AllArgsConstructor
@@ -22,7 +20,7 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
@@ -30,9 +28,22 @@ public class User implements Serializable {
     @Email(message = "Email invalid")
     @NotBlank(message = "The email is required")
     @NotNull(message = "The email can't be blank")
+    @Column(unique = true)
     private String email;
 
     @NotBlank(message = "The password is required")
     @NotNull(message = "The password can't be blank")
     private String password;
+
+    private boolean enabled = true;
+
+    @ManyToMany
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"
+            ))
+    private Set<Role> roles = new HashSet<>();
 }
